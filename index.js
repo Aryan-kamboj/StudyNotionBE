@@ -33,11 +33,11 @@ app.use("/api/auth",authRouter);
 const openRoutes = require("./routes/openRouter"); 
 app.use("/api/open",openRoutes);
 
-const {authTokenCheck} = require("./controllers/authControllers");
-app.use("/api/*",authTokenCheck);
-
 const adminRoutes = require("./routes/adminRouter");
 app.use("/api/admin",adminRoutes);
+
+const {authTokenCheck} = require("./controllers/authControllers");
+app.use("/api/*",authTokenCheck);
 
 const userRoutes = require("./routes/userRouter");
 app.use("/api/user",userRoutes);
