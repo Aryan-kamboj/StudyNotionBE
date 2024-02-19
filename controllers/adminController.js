@@ -1,10 +1,10 @@
 const CATEGORIES = require("../models/categories");
 exports.createCategory = async (req,res)=>{
     try {
-        const {email,userType}=req.locals;
+        // const {email,userType}=req.locals;
         // console.log(email,userType)
         const {category} = req.body;
-        if(email&&userType==="admin"&&category){
+        if(category){
             const response = await CATEGORIES.create({
                 categoryName:category
             });
