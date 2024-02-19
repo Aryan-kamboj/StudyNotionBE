@@ -5,7 +5,7 @@ app.use(express.json());
 
 const cors = require("cors");
 app.use(
-	cors({origin:["http://localhost:5173","http://localhost:4173", "http://localhost:4002","http://localhost:5500"],credentials:true})
+	cors({origin:["http://localhost:5173","https://master--studynotionkamboj.netlify.app/","http://localhost:4173", "http://localhost:4002","http://localhost:5500"],credentials:true})
 );
 app.options("*", cors())
 
@@ -33,11 +33,12 @@ app.use("/api/auth",authRouter);
 const openRoutes = require("./routes/openRouter"); 
 app.use("/api/open",openRoutes);
 
-const adminRoutes = require("./routes/adminRouter");
-app.use("/api/admin",adminRoutes);
 
 const {authTokenCheck} = require("./controllers/authControllers");
 app.use("/api/*",authTokenCheck);
+
+const adminRoutes = require("./routes/adminRouter");
+app.use("/api/admin",adminRoutes);
 
 const userRoutes = require("./routes/userRouter");
 app.use("/api/user",userRoutes);
