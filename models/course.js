@@ -7,7 +7,6 @@ const courseSchema = new mongoose.Schema({
         },
         profilePhoto:{
             type:String,
-            required:true,
         },
         id:{
             type:mongoose.Schema.ObjectId,
