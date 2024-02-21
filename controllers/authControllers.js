@@ -165,6 +165,12 @@ exports.login = async (req,res)=>{
         }
         else{
             const user = await USER.findOne({email:email},{_id:1,password:1,userType:1});
+            // console.log(user);
+            if(!user){
+                return res.status(400).json({
+                    message:"Password or username invalid"
+                })
+            }
             const check = await bcrypt.compare(password,user.password);
             if(check){
                 const jwtSecret = process.env.JWT_SECRET;
