@@ -1,6 +1,7 @@
 const mailSender = require("../config/mailingService");
 const CATEGORIES = require("../models/categories");
 const COURSE = require("../models/course");
+const USER = require("../models/user")
 const contactUsEmail = require("../templets/contactUsEmail");
 const contactUsReply = require("../templets/contactUsReply");
 exports.getCategories = async (req,res)=>{
@@ -20,10 +21,9 @@ exports.getCourse = async (req,res)=>{
         const {course} = req.query;
         // console.log(req);
         // const {instructor,courseName,courseDesc,coursePrice,tags,thumbnail,benifits,requirements,sections,isPublic,createdAt,rating,reviewCount,enrolled}
-        const courseDetails
-        = await COURSE.findById(course).select({
-            "instructor.fullName":1,
-            "instructor.profilePhoto":1,
+        let courseDetails
+        = JSON.stringify(await COURSE.findById(course).select({
+            "instructor":1,
             "courseName":1,
             "courseDesc":1,
             "coursePrice":1,
@@ -40,8 +40,16 @@ exports.getCourse = async (req,res)=>{
             "reviewCount":1,
             "enrolled":1,
             "_id":0
-        });
-        console.log(courseDetails);
+        }));
+        courseDetails = JSON.parse(courseDetails);
+        const instructor = await USER.findById(courseDetails?.instructor,"fname lname profilePhoto");
+        delete courseDetails[instructor];
+        courseDetails.instructor={
+            fullName:`${instructor?.fname} ${instructor?.lname}`,
+            profilePhoto:instructor?.profilePhoto,
+        }
+        // console.log(updatedDetails);
+        // console.log(courseDetails);
         return res.status(200).json({
             courseDetails:courseDetails
         })

@@ -1,18 +1,9 @@
 const mongoose = require("mongoose");
 const courseSchema = new mongoose.Schema({
     instructor:{
-        fullName:{
-            type:String,
-            required:true
-        },
-        profilePhoto:{
-            type:String,
-        },
-        id:{
             type:mongoose.Schema.ObjectId,
             required:true,
             ref:"INSTRUCTOR"
-        }
     },
     courseName:{
         type:String,

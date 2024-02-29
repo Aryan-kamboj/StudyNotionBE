@@ -14,12 +14,13 @@ exports.createCourse = async (req,res)=>{
         if(courseName&&courseDesc&&coursePrice&&courseCategory&&tags_parsed&&thumbnail&&benifits&&requirements_parsed){
             if(email&&userType){
             const {secure_url} = await fileUpload(thumbnail);
-            const user = await USER.findOne({email:email},{_id:1,fname:1,lname:1,profilePhoto:1});
-            const instructor = await INSTRUCTOR.findOne({email:email},{_id:1});
-            const instObj = {id:instructor._id,fullName:user.fname+" "+user.lname,profilePhoto:user.profilePhoto}
-                if(instructor){
+            const user = await USER.findOne({email:email},{_id:1});
+            // const instructor = await INSTRUCTOR.findOne({email:email},{_id:1});
+            // const instObj = {id:instructor._id,fullName:user.fname+" "+user.lname,profilePhoto:user.profilePhoto}
+                // if(instructor){
+                if(user){
                     const newCourse = await COURSE.create({
-                        instructor:instObj,
+                        instructor:user._id,
                         courseName:courseName,
                         courseDesc:courseDesc,
                         coursePrice:coursePrice,
