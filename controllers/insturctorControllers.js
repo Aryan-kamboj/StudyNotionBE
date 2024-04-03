@@ -323,7 +323,7 @@ exports.addLecture = async (req,res)=>{
                 
             }
             else{
-                return res.status(401).json({
+                return res.status(403).json({
                     message:"You don't have access to edit this course"
                 })
             }
@@ -523,7 +523,7 @@ exports.setPublic = async (req,res)=>{
                 })
             }   
             else{
-                return res.status(401).json({
+                return res.status(403).json({
                     message:"You don't have access to update this course"
                 })
             }

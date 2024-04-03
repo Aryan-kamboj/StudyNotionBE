@@ -12,8 +12,9 @@ const forgotPassword = require("../templets/forgotPassword")
 dotenv.config();
 exports.authTokenCheck = async (req,res,next)=>{
     try {
-        const {login} = req.cookies;
-        // console.log(req.cookies);
+        // console.log(req.headers.authorization.split(" ")[1])
+        const login = req.headers.authorization.split(" ")[1];
+        console.log("something",login);
         if(login){
             const verify = jwt.verify(login,process.env.JWT_SECRET);
             const {email,userType} = verify;
@@ -29,8 +30,9 @@ exports.authTokenCheck = async (req,res,next)=>{
         }
         next();
     } catch (error) {
-        res.clearCookie("login");
-        res.status(403).json({
+        //res.clearCookie("login");
+        console.log("hello",error)
+        res.status(401).json({
             message:"Login expired please log in again",
         });
     }
@@ -129,7 +131,7 @@ exports.signup = async (req,res)=>{
                     }
                     else{
                         await OTP.updateOne({email:email},{attempts:(query.attempts-1)});
-                        return res.status(401).json({
+                        return res.status(403).json({
                             message:"Wrong otp Entered"
                         })
                     }
@@ -183,13 +185,18 @@ exports.login = async (req,res)=>{
                     token = jwt.sign(login,jwtSecret,{expiresIn:15000*60});    
                 }
                 else{token = jwt.sign(login,jwtSecret,{expiresIn:"7d"});}
-                return res.cookie("login",token,{
-                    httpOnly: false, secure: true, sameSite: 'None'
-                }).status(200).json({
+                // return res.cookie("login",token,{
+                //     httpOnly: false, secure: true, sameSite: 'None'
+                // }).status(200).json({
+                //     user:user.userType,
+                //     token:token,
+                //     message:"Login successfull"
+                // });
+                    return res.status(200).json({
                     user:user.userType,
                     token:token,
                     message:"Login successfull"
-                });
+                  }) 
             }
             else{
                 res.status(401).json({
@@ -295,7 +302,7 @@ exports.changePassword = async (req,res)=>{
                         }
                     }
                     else{
-                        return res.status(401).json({
+                        return res.status(403).json({
                             message:"Old password did not match"
                         })
                     }

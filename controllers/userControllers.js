@@ -41,6 +41,7 @@ exports.updateProfile = async (req,res)=>{
 exports.changeProfilePhoto = async (req,res)=>{
     try {
         const {email} = req.locals;
+            console.log("haiiiiiii");
         const {newPicture} = req.files;
         // console.log(profilePhoto)
         if(email&&newPicture&&newPicture.mimetype.split("/")[0]==="image") {
@@ -54,10 +55,11 @@ exports.changeProfilePhoto = async (req,res)=>{
             else
                 delRes=true;
             const {secure_url} = await fileUpload(newPicture);
-            const dbUpdate = await USER.updateOne({email:email},{profilePhoto:secure_url});
+            const dbUpdate = await USER.updateOne({email:email},{profilePhoto:secure_url},{new:true});
             // console.log(delRes,secure_url,dbUpdate);
             if(delRes&&secure_url&&dbUpdate)
                 return res.status(200).json({
+                    updatedProfile : dbUpdate,
                     message:"Profile picture changed successfully"
                 })
             else
@@ -76,6 +78,7 @@ exports.changeProfilePhoto = async (req,res)=>{
 exports.myProfile = async (req,res)=>{
     try {
         const {email} = req.locals;
+        console.log(email)
         if(email){
             const {bio,fname,lname,phoneNo,DOB,gender,profilePhoto,countryCode} = await USER.findOne({email:email},"bio countryCode fname lname phoneNo DOB gender profilePhoto");
             // console.log(bio,fname,lname,phoneNo,DOB,gender,profilePhoto,countryCode);
